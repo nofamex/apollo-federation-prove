@@ -1,0 +1,43 @@
+version: "2.3"
+services:
+  films_service:
+    container_name: films_service
+    build:
+      context: ./Films
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./Films
+        target: /app/films
+    ports:
+      - 8082:8082
+    restart: always
+
+  people_service:
+    container_name: people_service
+    build:
+      context: ./People
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./People
+        target: /app/people
+    ports:
+      - 8081:8081
+    restart: always
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./Gateway
+        target: /app/gateway
+    ports:
+      - 8080:8080
+    links:
+      - films_service
+      - people_service
+    restart: always
